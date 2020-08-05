@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.quarkus</groupId>
-        <artifactId>quarkus-logging-loki-parent</artifactId>
+        <artifactId>quarkus-logging-cloudwatch-parent</artifactId>
         <version>919-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>quarkus-logging-loki</artifactId>
-    <name>Quarkus - Logging - Loki - Runtime</name>
+    <artifactId>quarkus-logging-cloudwatch</artifactId>
+    <name>Quarkus - Logging - Cloudwatch - Runtime</name>
     <description>Use Loki</description>
 
     <dependencies>
@@ -31,6 +31,10 @@
           </exclusions>
         </dependency>
 
+        <dependency>
+              <groupId>com.amazonaws</groupId>
+              <artifactId>aws-java-sdk-logs</artifactId>
+          </dependency>
 
 
 

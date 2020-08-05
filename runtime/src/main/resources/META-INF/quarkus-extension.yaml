@@ -1,10 +1,9 @@
 ---
-name: "Logging Loki"
+name: "Logging Cloudwatch"
 metadata:
   keywords:
   - "logging"
-  - "loki"
+  - "Cloudwatch"
   categories:
   - "experimental"
   status: "experimental"
-  guide: "https://quarkus.io/guides/logging-loki"

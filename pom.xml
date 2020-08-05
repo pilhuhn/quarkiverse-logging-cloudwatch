@@ -5,16 +5,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.quarkus</groupId>
-    <artifactId>quarkus-logging-loki-parent</artifactId>
+    <artifactId>quarkus-logging-cloudwatch-parent</artifactId>
     <version>919-SNAPSHOT</version>
-    <name>Quarkus - Logging - Loki</name>
+    <name>Quarkus - Logging - Cloudwatch</name>
 
     <packaging>pom</packaging>
 
     <properties>
       <!-- adjust to your Quarkus version -->
-      <quarkus.version>1.4.1.Final</quarkus.version>
-
+      <quarkus.version>1.6.1.Final</quarkus.version>
+      <aws.version>1.11.292</aws.version>
 
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -37,8 +37,18 @@
               <type>pom</type>
               <scope>import</scope>
           </dependency>
-      </dependencies>
+
+            <dependency>
+                <groupId>com.amazonaws</groupId>
+                <artifactId>aws-java-sdk-bom</artifactId>
+                <version>${aws.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+
   </dependencyManagement>
+
   <build>
       <pluginManagement>
           <plugins>

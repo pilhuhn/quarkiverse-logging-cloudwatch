@@ -1,16 +1,16 @@
-package io.quarkus.logging.loki.deployment;
+package io.quarkus.logging.cloudwatch.deployment;
 
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.annotations.ExecutionTime;
 import io.quarkus.deployment.annotations.Record;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
 import io.quarkus.deployment.builditem.LogHandlerBuildItem;
-import io.quarkus.logging.loki.LokiConfig;
-import io.quarkus.logging.loki.LokiHandlerValueFactory;
+import io.quarkus.logging.cloudwatch.CWConfig;
+import io.quarkus.logging.cloudwatch.CWHandlerValueFactory;
 
-class LokiProcessor {
+class CWProcessor {
 
-    private static final String FEATURE = "loki";
+    private static final String FEATURE = "log-cloudwatch";
 
     @BuildStep
     FeatureBuildItem feature() {
@@ -19,9 +19,9 @@ class LokiProcessor {
 
     @BuildStep
     @Record(ExecutionTime.RUNTIME_INIT)
-    LogHandlerBuildItem addLokiLogHandler(final LokiConfig lokiConfig,
-            final LokiHandlerValueFactory lokiHandlerValueFactory) {
-        return new LogHandlerBuildItem(lokiHandlerValueFactory.create(lokiConfig));
+    LogHandlerBuildItem addCloudwatchLogHandler(final CWConfig cwConfig,
+            final CWHandlerValueFactory lokiHandlerValueFactory) {
+        return new LogHandlerBuildItem(lokiHandlerValueFactory.create(cwConfig));
     }
 
     //    @BuildStep

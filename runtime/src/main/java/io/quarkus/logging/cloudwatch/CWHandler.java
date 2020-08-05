@@ -14,19 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.quarkus.logging.loki;
+package io.quarkus.logging.cloudwatch;
 
-import io.quarkus.runtime.RuntimeValue;
-import io.vertx.core.Vertx;
-import io.vertx.core.json.Json;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import com.amazonaws.services.logs.AWSLogs;
+import com.amazonaws.services.logs.model.InputLogEvent;
+import com.amazonaws.services.logs.model.PutLogEventsRequest;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
@@ -37,24 +34,21 @@ import org.jboss.logmanager.ExtLogRecord;
 /**
  * @author hrupp
  */
-public class LokiHandler extends Handler {
+public class CWHandler extends Handler {
 
-    HttpClient client;
     private String appLabel;
-    private URI lokiUri;
+    private final AWSLogs awsLogs;
+    private final String logStreamName;
+    private final String logGroupName;
+    private String sequenceToken;
     private String environment;
-    private RuntimeValue<Vertx> vertx;
 
 
-    public LokiHandler(URI lokiUri) {
-
-        this.lokiUri = lokiUri;
-        client = HttpClient.newBuilder()
-            .version(HttpClient.Version.HTTP_2)
-            .followRedirects(HttpClient.Redirect.NORMAL)
-            //          .proxy(ProxySelector.of(new InetSocketAddress(lokiHost, lokiPort)))
-            //          .authenticator(Authenticator.getDefault())
-            .build();
+    public CWHandler(AWSLogs awsLogs, String logGroup, String logStreamName, String token) {
+        this.logGroupName = logGroup;
+        this.awsLogs = awsLogs;
+        this.logStreamName = logStreamName;
+        sequenceToken = token;
     }
 
     @Override
@@ -80,10 +74,6 @@ public class LokiHandler extends Handler {
 
         if (environment != null && !environment.isEmpty()) {
             tags.put("env",environment);
-        }
-
-        if (record instanceof LokiLogRecord) {
-            tags.putAll(((LokiLogRecord) record).getTags());
         }
 
         tags.put("level", record.getLevel().getName());
@@ -114,22 +104,17 @@ public class LokiHandler extends Handler {
 
         String body = assemblePayload(msg, tags);
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(lokiUri)
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(body))
-                .build();
-        try {
+        PutLogEventsRequest request = new PutLogEventsRequest();
+        Collection<InputLogEvent> logEvents = new ArrayList<>();
+        logEvents.add(new InputLogEvent()
+                        .withMessage(body)
+                        .withTimestamp(System.currentTimeMillis())); // TODO get from log record?
+        request.setLogEvents(logEvents);
+        request.setLogGroupName(logGroupName);
+        request.setLogStreamName(logStreamName);
+        request.setSequenceToken(sequenceToken);
+        sequenceToken = awsLogs.putLogEvents(request).getNextSequenceToken();
 
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() != 204) {
-                System.out.println(response.statusCode());
-                System.out.println(response.body());
-            }
-        } catch (Exception ioe) {
-            System.err.println("Sending to loki failed: " + ioe.getMessage());
-            System.out.println(body);
-        }
     }
 
     @Override
@@ -142,25 +127,19 @@ public class LokiHandler extends Handler {
 
     private String assemblePayload(String message, Map<String, String> tags) {
 
-        List<Object> values = new ArrayList<>(2);
-        values.add(System.currentTimeMillis() + "000000"); // Golang Nanos
-        values.add(message);
-
-        List<Object> valuesList = new ArrayList<>();
-        valuesList.add(values);
-
-        Map<String, Object> stream2Object = new HashMap<>();
-        stream2Object.put("stream", tags);
-        stream2Object.put("values", valuesList);
-
-        List<Object> streamsArray = new ArrayList<>();
-        streamsArray.add(stream2Object);
-
-        Map<String, Object> job = new HashMap<>();
-        job.put("streams", streamsArray);
-
-        String body = Json.encodePrettily(job);
-        return body;
+        StringBuilder sb = new StringBuilder(message);
+        if (!tags.isEmpty()) {
+            sb.append(", ");
+            Iterator<Map.Entry<String, String>> iterator = tags.entrySet().iterator();
+            while(iterator.hasNext()) {
+                Map.Entry<String, String> entry = iterator.next();
+                sb.append(entry.getKey()).append("=").append(entry.getValue());
+                if (iterator.hasNext()) {
+                    sb.append(", ");
+                }
+            }
+        }
+        return sb.toString();
     }
 
     public void setAppLabel(String label) {
