@@ -20,15 +20,12 @@
             <artifactId>quarkus-core</artifactId>
         </dependency>
 
-
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-logs</artifactId>
         </dependency>
-
-
-
     </dependencies>
+
     <build>
         <plugins>
             <plugin>

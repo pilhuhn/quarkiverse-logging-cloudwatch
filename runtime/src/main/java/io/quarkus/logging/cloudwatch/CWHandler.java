@@ -16,13 +16,14 @@
  */
 package io.quarkus.logging.cloudwatch;
 
+import static java.util.stream.Collectors.joining;
+
 import com.amazonaws.services.logs.AWSLogs;
 import com.amazonaws.services.logs.model.InputLogEvent;
 import com.amazonaws.services.logs.model.PutLogEventsRequest;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Handler;
@@ -102,17 +103,18 @@ public class CWHandler extends Handler {
 
             String tid = ((ExtLogRecord) record).getMdc("traceId");
             if (tid!=null) {
-                msg = msg + ", traceId=" + tid;
+                tags.put("traceId", tid);
             }
         }
 
         String body = assemblePayload(msg, tags, record.getThrown());
 
+        InputLogEvent logEvent = new InputLogEvent()
+          .withMessage(body)
+          .withTimestamp(System.currentTimeMillis());
         // Queue this up, so that it can be flushed later in batch
         // Asynchronously
-        eventBuffer.add(new InputLogEvent()
-                        .withMessage(body)
-                        .withTimestamp(System.currentTimeMillis())); // TODO get from log record?
+        eventBuffer.add(logEvent);
 
     }
 
@@ -127,26 +129,25 @@ public class CWHandler extends Handler {
 
     private String assemblePayload(String message, Map<String, String> tags, Throwable thrown) {
 
-        StringBuilder sb = new StringBuilder(message);
-        if (thrown != null) {
-            sb.append("\n");
-            fillStackTrace(sb, thrown);
-            sb.append("\n");
+        StringBuilder sb = new StringBuilder();
+        sb.append("msg=[").append(message).append("]");
+        if (thrown!=null) {
+            sb.append(", stacktrace=[");
+            fillStackTrace(sb,thrown);
+            sb.append("]");
         }
-
         if (!tags.isEmpty()) {
-            sb.append(", ");
-            Iterator<Map.Entry<String, String>> iterator = tags.entrySet().iterator();
-            while(iterator.hasNext()) {
-                Map.Entry<String, String> entry = iterator.next();
-                sb.append(entry.getKey()).append("=").append(entry.getValue());
-                if (iterator.hasNext()) {
-                    sb.append(", ");
-                }
-            }
+            sb.append(", tags=[");
+            String tagsAsString = tags.keySet().stream()
+                      .map(key -> key + "=" + tags.get(key))
+                      .collect(joining(", "));
+            sb.append(tagsAsString);
+            sb.append("]");
         }
         return sb.toString();
     }
+
+
 
     private void fillStackTrace(StringBuilder sb, Throwable thrown) {
         for (StackTraceElement ste : thrown.getStackTrace()) {
