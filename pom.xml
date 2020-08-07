@@ -14,7 +14,7 @@
     <properties>
       <!-- adjust to your Quarkus version -->
       <quarkus.version>1.6.1.Final</quarkus.version>
-      <aws.version>1.11.292</aws.version>
+      <aws.version>1.11.836</aws.version>
 
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

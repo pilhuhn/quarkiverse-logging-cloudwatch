@@ -20,21 +20,11 @@
             <artifactId>quarkus-core</artifactId>
         </dependency>
 
-        <dependency>
-          <groupId>io.quarkus</groupId>
-          <artifactId>quarkus-vertx</artifactId>
-          <exclusions>
-            <exclusion>
-              <groupId>org.checkerframework</groupId>
-              <artifactId>checker-qual</artifactId>
-            </exclusion>
-          </exclusions>
-        </dependency>
 
         <dependency>
-              <groupId>com.amazonaws</groupId>
-              <artifactId>aws-java-sdk-logs</artifactId>
-          </dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-logs</artifactId>
+        </dependency>
 
 
 
@@ -46,17 +36,17 @@
                 <artifactId>quarkus-bootstrap-maven-plugin</artifactId>
                 <version>${quarkus.version}</version>
                 <executions>
-                                    <execution>
-                                        <goals>
-                                            <goal>extension-descriptor</goal>
-                                        </goals>
-                                        <phase>compile</phase>
-                                        <configuration>
-                                            <deployment>${project.groupId}:${project.artifactId}-deployment:${project.version}
-                                            </deployment>
-                                        </configuration>
-                                    </execution>
-                                </executions>
+                    <execution>
+                        <goals>
+                            <goal>extension-descriptor</goal>
+                        </goals>
+                        <phase>compile</phase>
+                        <configuration>
+                            <deployment>${project.groupId}:${project.artifactId}-deployment:${project.version}
+                            </deployment>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>

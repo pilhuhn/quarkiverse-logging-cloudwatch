@@ -17,12 +17,6 @@
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-core-deployment</artifactId>
-            <exclusions>
-                    <exclusion>
-                        <groupId>org.checkerframework</groupId>
-<artifactId>checker-qual</artifactId>
-                    </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -51,18 +45,6 @@
             <artifactId>quarkus-arc-deployment</artifactId>
             <scope>test</scope>
         </dependency>
-
-
-      <dependency>
-        <groupId>io.quarkus</groupId>
-        <artifactId>quarkus-vertx-deployment</artifactId>
-        <exclusions>
-          <exclusion>
-            <groupId>org.checkerframework</groupId>
-            <artifactId>checker-qual</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
     </dependencies>
 
     <build>
