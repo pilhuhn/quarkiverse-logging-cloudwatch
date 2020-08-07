@@ -27,13 +27,21 @@ The following is a list of properties. All are required.
 
 .application.properties
 ----
-quarkus.log.cloudwatch=true
-quarkus.log.cloudwatch.access-key-id=<your key>
-quarkus.log.cloudwatch.access-key-secret=<your secret>
-quarkus.log.cloudwatch.region=us-east-1
-quarkus.log.cloudwatch.log-group=my-log-goup
-quarkus.log.cloudwatch.log-stream-name=m<-log-stream
+quarkus.log.cloudwatch=true                            # <1>
+quarkus.log.cloudwatch.access-key-id=<your key>        # <2>
+quarkus.log.cloudwatch.access-key-secret=<your secret> # <3>
+quarkus.log.cloudwatch.region=us-east-1                # <4>
+quarkus.log.cloudwatch.log-group=<my-log-goup>         # <5>
+quarkus.log.cloudwatch.log-stream-name=<my-log-stream> # <6>
+quarkus.log.cloudwatch.level=INFO                      # <7>
 ----
+<1> Set to true to enable logging to CW
+<2> The AWS access key
+<3> The AWS secret for the key
+<4> The region to log to
+<5> The log-group to log to. This has to exist
+<6> The log-stream name. This is created if it does not exist
+<7> The minimum log message level that is forwarded
 
 
 

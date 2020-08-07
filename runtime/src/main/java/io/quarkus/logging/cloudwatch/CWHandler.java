@@ -21,9 +21,9 @@ import com.amazonaws.services.logs.model.InputLogEvent;
 import com.amazonaws.services.logs.model.PutLogEventsRequest;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
@@ -41,14 +41,22 @@ public class CWHandler extends Handler {
     private final String logStreamName;
     private final String logGroupName;
     private String sequenceToken;
-    private String environment;
+    private volatile boolean done = false;
 
+    final List<InputLogEvent> eventBuffer;
 
     public CWHandler(AWSLogs awsLogs, String logGroup, String logStreamName, String token) {
         this.logGroupName = logGroup;
         this.awsLogs = awsLogs;
         this.logStreamName = logStreamName;
         sequenceToken = token;
+        eventBuffer = new ArrayList<>();
+        Publisher publisher = new Publisher();
+
+        Thread t = new Thread(publisher);
+        t.setDaemon(true);
+        t.start();
+
     }
 
     @Override
@@ -70,10 +78,6 @@ public class CWHandler extends Handler {
         }
         if (appLabel != null && !appLabel.isEmpty()) {
             tags.put("app", appLabel);
-        }
-
-        if (environment != null && !environment.isEmpty()) {
-            tags.put("env",environment);
         }
 
         tags.put("level", record.getLevel().getName());
@@ -102,32 +106,34 @@ public class CWHandler extends Handler {
             }
         }
 
-        String body = assemblePayload(msg, tags);
+        String body = assemblePayload(msg, tags, record.getThrown());
 
-        PutLogEventsRequest request = new PutLogEventsRequest();
-        Collection<InputLogEvent> logEvents = new ArrayList<>();
-        logEvents.add(new InputLogEvent()
+        // Queue this up, so that it can be flushed later in batch
+        // Asynchronously
+        eventBuffer.add(new InputLogEvent()
                         .withMessage(body)
                         .withTimestamp(System.currentTimeMillis())); // TODO get from log record?
-        request.setLogEvents(logEvents);
-        request.setLogGroupName(logGroupName);
-        request.setLogStreamName(logStreamName);
-        request.setSequenceToken(sequenceToken);
-        sequenceToken = awsLogs.putLogEvents(request).getNextSequenceToken();
 
     }
 
     @Override
     public void flush() {
+        done = true;
     }
 
     @Override
     public void close() throws SecurityException {
     }
 
-    private String assemblePayload(String message, Map<String, String> tags) {
+    private String assemblePayload(String message, Map<String, String> tags, Throwable thrown) {
 
         StringBuilder sb = new StringBuilder(message);
+        if (thrown != null) {
+            sb.append("\n");
+            fillStackTrace(sb, thrown);
+            sb.append("\n");
+        }
+
         if (!tags.isEmpty()) {
             sb.append(", ");
             Iterator<Map.Entry<String, String>> iterator = tags.entrySet().iterator();
@@ -142,13 +148,57 @@ public class CWHandler extends Handler {
         return sb.toString();
     }
 
+    private void fillStackTrace(StringBuilder sb, Throwable thrown) {
+        for (StackTraceElement ste : thrown.getStackTrace()) {
+            sb.append("  ").append(ste.toString()).append("\n");
+        }
+        if (thrown.getCause()!= null) {
+            sb.append("Caused by:");
+            fillStackTrace(sb, thrown.getCause());
+        }
+    }
+
     public void setAppLabel(String label) {
         if (label != null) {
             this.appLabel = label;
         }
     }
 
-    public void setEnvironment(String environment) {
-        this.environment = environment;
+
+    private class Publisher implements Runnable {
+
+        List<InputLogEvent> events;
+
+        @Override
+        public void run() {
+
+            while (true) {
+                synchronized (eventBuffer) {
+                    events = new ArrayList<>(eventBuffer);
+                    eventBuffer.clear();
+                }
+
+                if (events.size() > 0 ) {
+
+                    PutLogEventsRequest request = new PutLogEventsRequest();
+                    request.setLogEvents(events);
+                    request.setLogGroupName(logGroupName);
+                    request.setLogStreamName(logStreamName);
+                    request.setSequenceToken(sequenceToken);
+                    // Do the call and get the next token
+                    sequenceToken = awsLogs.putLogEvents(request).getNextSequenceToken();
+                }
+
+                if (done) {
+                    return;
+                }
+
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();  // TODO: Customise this generated block
+                }
+            }
+        }
     }
 }
