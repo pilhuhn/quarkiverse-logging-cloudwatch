@@ -21,7 +21,9 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      - name: Build & publish with Maven
+      - name: Build with Maven
+        run: mvn package
+      - name: Publish with Maven
         run: mvn -B deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
