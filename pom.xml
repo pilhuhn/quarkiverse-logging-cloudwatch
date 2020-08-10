@@ -6,7 +6,7 @@
 
     <groupId>io.quarkus</groupId>
     <artifactId>quarkus-logging-cloudwatch-parent</artifactId>
-    <version>919-SNAPSHOT</version>
+    <version>0.0.3-SNAPSHOT</version>
     <name>Quarkus - Logging - Cloudwatch</name>
 
     <packaging>pom</packaging>
@@ -48,6 +48,14 @@
         </dependencies>
 
   </dependencyManagement>
+
+  <distributionManagement>
+      <repository>
+        <id>github</id>
+        <name>GitHub Packages</name>
+        <url>https://maven.pkg.github.com/pilhuhn/quarkus-logging-cloudwatch</url>
+      </repository>
+    </distributionManagement>
 
   <build>
       <pluginManagement>
