@@ -9,6 +9,10 @@
     <version>0.0.3-SNAPSHOT</version>
     <name>Quarkus - Logging - Cloudwatch</name>
 
+    <scm>
+      <developerConnection>scm:git:https://github.com/pilhuhn/quarkus-logging-cloudwatch.git</developerConnection>
+    </scm>
+
     <packaging>pom</packaging>
 
     <properties>
@@ -65,6 +69,11 @@
                   <artifactId>maven-compiler-plugin</artifactId>
                   <version>${compiler-plugin.version}</version>
               </plugin>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-release-plugin</artifactId>
+              <version>3.0.0-M1</version>
+            </plugin>
           </plugins>
       </pluginManagement>
   </build>
