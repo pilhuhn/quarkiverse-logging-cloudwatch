@@ -4,12 +4,12 @@
 
     <groupId>io.quarkus</groupId>
     <artifactId>quarkus-logging-cloudwatch-parent</artifactId>
-    <version>0.0.5-SNAPSHOT</version>
+    <version>0.0.5</version>
     <name>Quarkus - Logging - Cloudwatch</name>
 
     <scm>
       <developerConnection>scm:git:https://github.com/pilhuhn/quarkus-logging-cloudwatch.git</developerConnection>
-      <tag>HEAD</tag>
+      <tag>v0.0.5</tag>
   </scm>
 
     <packaging>pom</packaging>
