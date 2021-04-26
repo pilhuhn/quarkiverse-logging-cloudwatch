@@ -32,13 +32,12 @@
                 <version>${quarkus.version}</version>
                 <executions>
                     <execution>
+                        <phase>compile</phase>
                         <goals>
                             <goal>extension-descriptor</goal>
                         </goals>
-                        <phase>compile</phase>
                         <configuration>
-                            <deployment>${project.groupId}:${project.artifactId}-deployment:${project.version}
-                            </deployment>
+                            <deployment>${project.groupId}:${project.artifactId}-deployment:${project.version}</deployment>
                         </configuration>
                     </execution>
                 </executions>
@@ -53,9 +52,6 @@
                             <version>${quarkus.version}</version>
                         </path>
                     </annotationProcessorPaths>
-                    <source>11</source>
-                    <target>11</target>
-                    <release>11</release>
                 </configuration>
             </plugin>
         </plugins>
