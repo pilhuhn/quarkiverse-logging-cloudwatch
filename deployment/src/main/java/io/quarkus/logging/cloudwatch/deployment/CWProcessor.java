@@ -24,9 +24,4 @@ class CWProcessor {
         return new LogHandlerBuildItem(lokiHandlerValueFactory.create(cwConfig));
     }
 
-    //    @BuildStep
-    //    ExtensionSslNativeSupportBuildItem activateSslNativeSupport() {
-    //        return new ExtensionSslNativeSupportBuildItem(FEATURE);
-    //    }
-
 }
