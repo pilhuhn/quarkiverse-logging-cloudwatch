@@ -22,7 +22,7 @@ public class CWHandlerValueFactory {
 
     public RuntimeValue<Optional<Handler>> create(final CWConfig config) {
 
-        if (!config.enable) {
+        if (!config.enabled) {
             log.fine("--- LogCloudwatch is not enabled ---");
             return new RuntimeValue<>(Optional.empty());
         }

@@ -7,7 +7,7 @@ Just add it to your pom, enable it in `application.properties` and you are ready
 
 == Installation
 
-If you want to use this extension, you need to add the `quarkus-logging-splunk` extension first.
+If you want to use this extension, you need to add the `quarkus-logging-cloudwatch` extension first.
 In your `pom.xml` file, add:
 
 [source,xml]

@@ -15,7 +15,7 @@ Build the extension locally (see below) and then add this to your Application's 
 [source,xml]
 ----
     <dependency>
-      <groupId>io.quarkus</groupId>
+      <groupId>io.quarkiverse.logging.cloudwatch</groupId>
       <artifactId>quarkus-logging-cloudwatch</artifactId>
       <version>919-SNAPSHOT</version>
     </dependency>
@@ -42,20 +42,3 @@ quarkus.log.cloudwatch.level=INFO                      # <7>
 <5> The log-group to log to. This has to exist
 <6> The log-stream name. This is created if it does not exist
 <7> The minimum log message level that is forwarded
-
-
-
-
-== Building
-
-Check out the source code and then in the root pom adjust the Quarkus version to your version of Quarkus.
-
-.Root pom.xml of quarkus-logging-loki
-[source,xml]
-----
-    <properties>
-      <!-- adjust to your Quarkus version -->
-      <quarkus.version>1.6.0.Final</quarkus.version>
-----
-
-Afterwards just build the extension via `mvn install`.

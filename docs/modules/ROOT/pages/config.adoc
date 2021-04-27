@@ -12,193 +12,65 @@ h|[[quarkus-log-handler-splunk_configuration]]link:#quarkus-log-handler-splunk_c
 h|Type
 h|Default
 
-a| [[quarkus-log-handler-splunk_quarkus.log.handler.splunk.enabled]]`link:#quarkus-log-handler-splunk_quarkus.log.handler.splunk.enabled[quarkus.log.handler.splunk.enabled]`
+a| [[quarkus-log-handler-splunk_quarkus.log.handler.splunk.enabled]]`link:#quarkus-log-handler-splunk_quarkus.log.handler.splunk.enabled[quarkus.log.cloudwatch.enabled]`
 
 [.description]
 --
-Determine whether to enable the handler
+Set to true to enable logging to Cloudwatch
 --|boolean 
 |`true`
 
 
-a| [[quarkus-log-handler-splunk_quarkus.log.handler.splunk.level]]`link:#quarkus-log-handler-splunk_quarkus.log.handler.splunk.level[quarkus.log.handler.splunk.level]`
+a| [[quarkus-log-handler-splunk_quarkus.log.handler.splunk.level]]`link:#quarkus-log-handler-splunk_quarkus.log.handler.splunk.level[quarkus.log.cloudwatch.level]`
 
 [.description]
 --
-The splunk handler log level. By default it is not more strict than the root handler level.
+The AWS access key
 --|link:https://docs.jboss.org/jbossas/javadoc/7.1.2.Final/org/jboss/logmanager/Level.html[Level]
  
-|`ALL`
+|`WARN`
 
 
-a| [[quarkus-log-handler-splunk_quarkus.log.handler.splunk.url]]`link:#quarkus-log-handler-splunk_quarkus.log.handler.splunk.url[quarkus.log.handler.splunk.url]`
-
-[.description]
---
-Splunk HEC endpoint base url. 
- The actual endpoint is expected at path /services/collector/events/1.0
---|string 
-|`https://localhost:8088/`
-
-
-a| [[quarkus-log-handler-splunk_quarkus.log.handler.splunk.disable-certificate-validation]]`link:#quarkus-log-handler-splunk_quarkus.log.handler.splunk.disable-certificate-validation[quarkus.log.handler.splunk.disable-certificate-validation]`
+a| [[quarkus-log-handler-splunk_quarkus.log.handler.splunk.url]]`link:#quarkus-log-handler-splunk_quarkus.log.handler.splunk.url[quarkus.log.cloudwatch.access-key-id]`
 
 [.description]
 --
-Disable TLS certificate validation with HEC endpoint
---|boolean 
-|`false`
+The AWS access key
+--|string
+|`<your key>`
 
 
-a| [[quarkus-log-handler-splunk_quarkus.log.handler.splunk.token]]`link:#quarkus-log-handler-splunk_quarkus.log.handler.splunk.token[quarkus.log.handler.splunk.token]`
-
-[.description]
---
-The application token to authenticate with HEC, the token is mandatory if the extension is enabled https://docs.splunk.com/Documentation/Splunk/8.1.0/Data/FormateventsforHTTPEventCollector++#++HEC_token
---|string 
-|
-
-
-a| [[quarkus-log-handler-splunk_quarkus.log.handler.splunk.send-mode]]`link:#quarkus-log-handler-splunk_quarkus.log.handler.splunk.send-mode[quarkus.log.handler.splunk.send-mode]`
+a| [[quarkus-log-handler-splunk_quarkus.log.handler.splunk.disable-certificate-validation]]`link:#quarkus-log-handler-splunk_quarkus.log.handler.splunk.disable-certificate-validation[quarkus.log.cloudwatch.access-key-secret]`
 
 [.description]
 --
-The strategy to send events to HEC. 
- In sequential mode, there is only one HTTP connection to HEC and the order of events is preserved, but performance is lower. In parallel mode, event batches are sent asynchronously over multiple HTTP connections, and events with the same timestamp (that has 1 millisecond resolution) may be indexed out of order by Splunk.
---|`sequential`, `parallel` 
-|`sequential`
+The AWS secret for the key
+--|string
+|`<your secret>`
 
 
-a| [[quarkus-log-handler-splunk_quarkus.log.handler.splunk.channel]]`link:#quarkus-log-handler-splunk_quarkus.log.handler.splunk.channel[quarkus.log.handler.splunk.channel]`
-
-[.description]
---
-A GUID to identify an HEC client and guarantee isolation at HEC level in case of slow clients. https://docs.splunk.com/Documentation/Splunk/8.1.0/Data/AboutHECIDXAck++#++About_channels_and_sending_data
---|string 
-|
-
-
-a| [[quarkus-log-handler-splunk_quarkus.log.handler.splunk.batch-interval]]`link:#quarkus-log-handler-splunk_quarkus.log.handler.splunk.batch-interval[quarkus.log.handler.splunk.batch-interval]`
+a| [[quarkus-log-handler-splunk_quarkus.log.handler.splunk.disable-certificate-validation]]`link:#quarkus-log-handler-splunk_quarkus.log.handler.splunk.disable-certificate-validation[quarkus.log.cloudwatch.region]`
 
 [.description]
 --
-Batching delay before sending a group of events. If 0, the events are sent immediately.
---|link:https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html[Duration]
-  link:#duration-note-anchor[icon:question-circle[], title=More information about the Duration format]
-|`10S`
+The region to log to
+--|string
+|`us-east-1`
 
 
-a| [[quarkus-log-handler-splunk_quarkus.log.handler.splunk.batch-size-count]]`link:#quarkus-log-handler-splunk_quarkus.log.handler.splunk.batch-size-count[quarkus.log.handler.splunk.batch-size-count]`
-
-[.description]
---
-Maximum number of events in a batch. By default 10, if 0 no batching.
---|long 
-|`10`
-
-
-a| [[quarkus-log-handler-splunk_quarkus.log.handler.splunk.batch-size-bytes]]`link:#quarkus-log-handler-splunk_quarkus.log.handler.splunk.batch-size-bytes[quarkus.log.handler.splunk.batch-size-bytes]`
+a| [[quarkus-log-handler-splunk_quarkus.log.handler.splunk.disable-certificate-validation]]`link:#quarkus-log-handler-splunk_quarkus.log.handler.splunk.disable-certificate-validation[quarkus.log.cloudwatch.log-group]`
 
 [.description]
 --
-Maximum total size in bytes of events in a batch. By default 10KB, if 0 no batching.
---|long 
-|`10`
+The log-group to log to. This has to exist
+--|string
+|`<my-log-goup>`
 
 
-a| [[quarkus-log-handler-splunk_quarkus.log.handler.splunk.max-retries]]`link:#quarkus-log-handler-splunk_quarkus.log.handler.splunk.max-retries[quarkus.log.handler.splunk.max-retries]`
-
-[.description]
---
-Maximum number of retries in case of I/O exceptions with HEC connection.
---|long 
-|`0`
-
-
-a| [[quarkus-log-handler-splunk_quarkus.log.handler.splunk.format]]`link:#quarkus-log-handler-splunk_quarkus.log.handler.splunk.format[quarkus.log.handler.splunk.format]`
+a| [[quarkus-log-handler-splunk_quarkus.log.handler.splunk.disable-certificate-validation]]`link:#quarkus-log-handler-splunk_quarkus.log.handler.splunk.disable-certificate-validation[quarkus.log.cloudwatch.log-stream-name]`
 
 [.description]
 --
-The log format, defining which metadata are inlined inside the log main payload. 
- Specific metadata (hostname, category, thread name, ...), as well as MDC key/value map, can also be sent in a structured way.
---|string 
-|`%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c{3.}] (%t) %s%e%n`
-
-
-a| [[quarkus-log-handler-splunk_quarkus.log.handler.splunk.include-exception]]`link:#quarkus-log-handler-splunk_quarkus.log.handler.splunk.include-exception[quarkus.log.handler.splunk.include-exception]`
-
-[.description]
---
-Whether to send the thrown exception message as a structured metadata of the log event (as opposed to %e in a formatted message, it does not include the exception name or stacktrace)
---|boolean 
-|`false`
-
-
-a| [[quarkus-log-handler-splunk_quarkus.log.handler.splunk.include-logger-name]]`link:#quarkus-log-handler-splunk_quarkus.log.handler.splunk.include-logger-name[quarkus.log.handler.splunk.include-logger-name]`
-
-[.description]
---
-Whether to send the logger name as a structured metadata of the log event (equivalent of %c in a formatted message)
---|boolean 
-|`false`
-
-
-a| [[quarkus-log-handler-splunk_quarkus.log.handler.splunk.include-thread-name]]`link:#quarkus-log-handler-splunk_quarkus.log.handler.splunk.include-thread-name[quarkus.log.handler.splunk.include-thread-name]`
-
-[.description]
---
-Whether to send the thread name as a structured metadata of the log event (equivalent of %t in a formatted message)
---|boolean 
-|`false`
-
-
-a| [[quarkus-log-handler-splunk_quarkus.log.handler.splunk.metadata-host]]`link:#quarkus-log-handler-splunk_quarkus.log.handler.splunk.metadata-host[quarkus.log.handler.splunk.metadata-host]`
-
-[.description]
---
-Overrides the host name metadata value.
---|string 
-|`The equivalent of %h in a formatted message`
-
-
-a| [[quarkus-log-handler-splunk_quarkus.log.handler.splunk.metadata-source]]`link:#quarkus-log-handler-splunk_quarkus.log.handler.splunk.metadata-source[quarkus.log.handler.splunk.metadata-source]`
-
-[.description]
---
-The source value to assign to the event data. For example, if you're sending data from an app you're developing, you could set this key to the name of the app. https://docs.splunk.com/Documentation/Splunk/8.1.0/Data/FormateventsforHTTPEventCollector++#++Event_metadata
---|string 
-|
-
-
-a| [[quarkus-log-handler-splunk_quarkus.log.handler.splunk.metadata-source-type]]`link:#quarkus-log-handler-splunk_quarkus.log.handler.splunk.metadata-source-type[quarkus.log.handler.splunk.metadata-source-type]`
-
-[.description]
---
-The source type value to assign to the event data https://docs.splunk.com/Documentation/Splunk/8.1.0/Data/FormateventsforHTTPEventCollector++#++Event_metadata 
- A given source type may have indexed fields extraction enabled, which is the case of the default built-in _json.
---|string 
-|`_json`
-
-
-a| [[quarkus-log-handler-splunk_quarkus.log.handler.splunk.metadata-index]]`link:#quarkus-log-handler-splunk_quarkus.log.handler.splunk.metadata-index[quarkus.log.handler.splunk.metadata-index]`
-
-[.description]
---
-The optional name of the index by which the event data is to be stored. If set, it must be within the list of allowed indexes of the token (if it has the indexes parameter set). https://docs.splunk.com/Documentation/Splunk/8.1.0/Data/FormateventsforHTTPEventCollector++#++Event_metadata
---|string 
-|
-
-|===
-ifndef::no-duration-note[]
-[NOTE]
-[[duration-note-anchor]]
-.About the Duration format
-====
-The format for durations uses the standard `java.time.Duration` format.
-You can learn more about it in the link:https://docs.oracle.com/javase/8/docs/api/java/time/Duration.html#parse-java.lang.CharSequence-[Duration#parse() javadoc].
-
-You can also provide duration values starting with a number.
-In this case, if the value consists only of a number, the converter treats the value as seconds.
-Otherwise, `PT` is implicitly prepended to the value to obtain a standard `java.time.Duration` format.
-====
-endif::no-duration-note[]
+The log-stream name. This is created if it does not exist
+--|string
+|`<my-log-stream>`
