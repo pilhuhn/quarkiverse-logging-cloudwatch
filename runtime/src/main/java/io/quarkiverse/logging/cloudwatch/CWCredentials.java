@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.quarkus.logging.cloudwatch;
+package io.quarkiverse.logging.cloudwatch;
 
 import com.amazonaws.auth.AWSCredentials;
 
@@ -23,20 +23,19 @@ import com.amazonaws.auth.AWSCredentials;
  */
 public class CWCredentials implements AWSCredentials {
 
+    private CWConfig config;
 
-  private CWConfig config;
+    public CWCredentials(CWConfig config) {
+        this.config = config;
+    }
 
-  public CWCredentials(CWConfig config) {
-    this.config = config;
-  }
+    @Override
+    public String getAWSAccessKeyId() {
+        return config.accessKeyId;
+    }
 
-  @Override
-  public String getAWSAccessKeyId() {
-    return config.accessKeyId;
-  }
-
-  @Override
-  public String getAWSSecretKey() {
-    return config.accessKeySecret;
-  }
+    @Override
+    public String getAWSSecretKey() {
+        return config.accessKeySecret;
+    }
 }

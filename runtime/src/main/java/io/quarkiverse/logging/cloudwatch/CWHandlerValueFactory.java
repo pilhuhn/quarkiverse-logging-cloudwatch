@@ -1,4 +1,9 @@
-package io.quarkus.logging.cloudwatch;
+package io.quarkiverse.logging.cloudwatch;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.logging.Handler;
+import java.util.logging.Logger;
 
 import com.amazonaws.services.logs.AWSLogs;
 import com.amazonaws.services.logs.AWSLogsClientBuilder;
@@ -6,13 +11,9 @@ import com.amazonaws.services.logs.model.CreateLogStreamRequest;
 import com.amazonaws.services.logs.model.CreateLogStreamResult;
 import com.amazonaws.services.logs.model.DescribeLogStreamsRequest;
 import com.amazonaws.services.logs.model.LogStream;
-import java.util.List;
-import java.util.Optional;
-import java.util.logging.Handler;
 
 import io.quarkus.runtime.RuntimeValue;
 import io.quarkus.runtime.annotations.Recorder;
-import java.util.logging.Logger;
 
 @Recorder
 public class CWHandlerValueFactory {
@@ -48,8 +49,7 @@ public class CWHandlerValueFactory {
         DescribeLogStreamsRequest describeLogStreamsRequest = new DescribeLogStreamsRequest(config.logGroup);
         // We need to filter down, as CW returns by default only 50 streams and ours may not be in it.
         describeLogStreamsRequest.withLogStreamNamePrefix(config.logStreamName);
-        List<LogStream> logStreams =
-          awsLogs.describeLogStreams(describeLogStreamsRequest).getLogStreams();
+        List<LogStream> logStreams = awsLogs.describeLogStreams(describeLogStreamsRequest).getLogStreams();
 
         boolean found = false;
         for (LogStream ls : logStreams) {
@@ -60,10 +60,10 @@ public class CWHandlerValueFactory {
         }
 
         if (!found) {
-            CreateLogStreamResult logStream = awsLogs.createLogStream(new CreateLogStreamRequest(config.logGroup, config.logStreamName));
+            CreateLogStreamResult logStream = awsLogs
+                    .createLogStream(new CreateLogStreamRequest(config.logGroup, config.logStreamName));
         }
         return token;
     }
-
 
 }

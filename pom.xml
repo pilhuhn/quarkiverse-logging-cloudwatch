@@ -1,45 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>pilhuhn</groupId>
+    <parent>
+        <groupId>io.quarkiverse</groupId>
+        <artifactId>quarkiverse-parent</artifactId>
+        <version>7</version>
+    </parent>
+
+    <groupId>io.quarkiverse.logging.cloudwatch</groupId>
     <artifactId>quarkus-logging-cloudwatch-parent</artifactId>
     <version>0.0.7-SNAPSHOT</version>
     <name>Quarkus - Logging - Cloudwatch</name>
 
     <scm>
-      <developerConnection>scm:git:https://github.com/pilhuhn/quarkus-logging-cloudwatch.git</developerConnection>
-      <tag>HEAD</tag>
-  </scm>
+        <developerConnection>scm:git:https://github.com/pilhuhn/quarkus-logging-cloudwatch.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
 
     <packaging>pom</packaging>
 
     <properties>
-      <!-- adjust to your Quarkus version -->
-      <quarkus.version>1.6.1.Final</quarkus.version>
-      <aws.version>1.11.836</aws.version>
+        <!-- adjust to your Quarkus version -->
+        <quarkus.version>1.13.2.Final</quarkus.version>
+        <aws.version>1.11.836</aws.version>
 
-      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-      <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-      <maven.compiler.parameters>true</maven.compiler.parameters>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.parameters>true</maven.compiler.parameters>
 
-      <compiler-plugin.version>3.8.1</compiler-plugin.version>
+        <compiler-plugin.version>3.8.1</compiler-plugin.version>
     </properties>
 
     <modules>
         <module>deployment</module>
         <module>runtime</module>
+        <module>integration-test</module>
+        <module>docs</module>
     </modules>
 
-  <dependencyManagement>
-      <dependencies>
-          <dependency>
-              <groupId>io.quarkus</groupId>
-              <artifactId>quarkus-bom-deployment</artifactId>
-              <version>${quarkus.version}</version>
-              <type>pom</type>
-              <scope>import</scope>
-          </dependency>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.quarkus</groupId>
+                <artifactId>quarkus-bom</artifactId>
+                <version>${quarkus.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 
             <dependency>
                 <groupId>com.amazonaws</groupId>
@@ -50,30 +59,30 @@
             </dependency>
         </dependencies>
 
-  </dependencyManagement>
+    </dependencyManagement>
 
-  <distributionManagement>
-      <repository>
-        <id>github</id>
-        <name>GitHub Packages</name>
-        <url>https://maven.pkg.github.com/pilhuhn/quarkus-logging-cloudwatch</url>
-      </repository>
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/pilhuhn/quarkus-logging-cloudwatch</url>
+        </repository>
     </distributionManagement>
 
-  <build>
-      <pluginManagement>
-          <plugins>
-              <plugin>
-                  <groupId>org.apache.maven.plugins</groupId>
-                  <artifactId>maven-compiler-plugin</artifactId>
-                  <version>${compiler-plugin.version}</version>
-              </plugin>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-release-plugin</artifactId>
-              <version>3.0.0-M1</version>
-            </plugin>
-          </plugins>
-      </pluginManagement>
-  </build>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${compiler-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>3.0.0-M1</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>

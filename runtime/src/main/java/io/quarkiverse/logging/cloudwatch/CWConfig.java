@@ -1,4 +1,4 @@
-package io.quarkus.logging.cloudwatch;
+package io.quarkiverse.logging.cloudwatch;
 
 import java.util.Optional;
 import java.util.logging.Level;

@@ -1,12 +1,12 @@
-package io.quarkus.logging.cloudwatch.deployment;
+package io.quarkiverse.logging.cloudwatch.deployment;
 
+import io.quarkiverse.logging.cloudwatch.CWConfig;
+import io.quarkiverse.logging.cloudwatch.CWHandlerValueFactory;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.annotations.ExecutionTime;
 import io.quarkus.deployment.annotations.Record;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
 import io.quarkus.deployment.builditem.LogHandlerBuildItem;
-import io.quarkus.logging.cloudwatch.CWConfig;
-import io.quarkus.logging.cloudwatch.CWHandlerValueFactory;
 
 class CWProcessor {
 
