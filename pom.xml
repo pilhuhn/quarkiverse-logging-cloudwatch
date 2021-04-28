@@ -14,11 +14,6 @@
     <version>0.0.7-SNAPSHOT</version>
     <name>Quarkus - Logging - Cloudwatch</name>
 
-    <scm>
-        <developerConnection>scm:git:https://github.com/pilhuhn/quarkus-logging-cloudwatch.git</developerConnection>
-        <tag>HEAD</tag>
-    </scm>
-
     <packaging>pom</packaging>
 
     <properties>
@@ -60,14 +55,6 @@
         </dependencies>
 
     </dependencyManagement>
-
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/pilhuhn/quarkus-logging-cloudwatch</url>
-        </repository>
-    </distributionManagement>
 
     <build>
         <pluginManagement>
