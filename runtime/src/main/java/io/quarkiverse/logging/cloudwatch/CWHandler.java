@@ -44,16 +44,16 @@ public class CWHandler extends Handler {
     private String sequenceToken;
     private volatile boolean done = false;
 
-    final List<InputLogEvent> eventBuffer;
+    private final List<InputLogEvent> eventBuffer;
 
-    public CWHandler(AWSLogs awsLogs, String logGroup, String logStreamName, String token) {
+    CWHandler(AWSLogs awsLogs, String logGroup, String logStreamName, String token) {
         this.logGroupName = logGroup;
         this.awsLogs = awsLogs;
         this.logStreamName = logStreamName;
-        sequenceToken = token;
-        eventBuffer = new ArrayList<>();
-        Publisher publisher = new Publisher();
+        this.sequenceToken = token;
+        this.eventBuffer = new ArrayList<>();
 
+        Publisher publisher = new Publisher();
         Thread t = new Thread(publisher);
         t.setDaemon(true);
         t.start();
@@ -155,7 +155,7 @@ public class CWHandler extends Handler {
         }
     }
 
-    public void setAppLabel(String label) {
+    void setAppLabel(String label) {
         if (label != null) {
             this.appLabel = label;
         }
