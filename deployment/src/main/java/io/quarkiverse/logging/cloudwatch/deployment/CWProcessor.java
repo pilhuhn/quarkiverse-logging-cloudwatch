@@ -36,7 +36,7 @@ class CWProcessor {
     @BuildStep
     @Record(ExecutionTime.RUNTIME_INIT)
     LogHandlerBuildItem addCloudwatchLogHandler(final CWConfig cwConfig,
-            final CWHandlerValueFactory lokiHandlerValueFactory) {
-        return new LogHandlerBuildItem(lokiHandlerValueFactory.create(cwConfig));
+            final CWHandlerValueFactory cwHandlerValueFactory) {
+        return new LogHandlerBuildItem(cwHandlerValueFactory.create(cwConfig));
     }
 }

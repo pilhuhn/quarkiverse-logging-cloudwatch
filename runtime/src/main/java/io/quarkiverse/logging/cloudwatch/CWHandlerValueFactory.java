@@ -28,6 +28,7 @@ import com.amazonaws.services.logs.model.CreateLogStreamResult;
 import com.amazonaws.services.logs.model.DescribeLogStreamsRequest;
 import com.amazonaws.services.logs.model.LogStream;
 
+import io.quarkiverse.logging.cloudwatch.auth.CWCredentialsProvider;
 import io.quarkus.runtime.RuntimeValue;
 import io.quarkus.runtime.annotations.Recorder;
 
@@ -59,7 +60,6 @@ public class CWHandlerValueFactory {
     }
 
     private String createLogStreamIfNeeded(AWSLogs awsLogs, CWConfig config) {
-
         String token = null;
 
         DescribeLogStreamsRequest describeLogStreamsRequest = new DescribeLogStreamsRequest(config.logGroup);

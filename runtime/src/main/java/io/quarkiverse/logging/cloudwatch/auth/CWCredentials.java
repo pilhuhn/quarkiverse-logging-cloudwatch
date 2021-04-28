@@ -14,28 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.quarkiverse.logging.cloudwatch;
+package io.quarkiverse.logging.cloudwatch.auth;
 
 import com.amazonaws.auth.AWSCredentials;
+
+import io.quarkiverse.logging.cloudwatch.CWConfig;
 
 /**
  * @author hrupp
  */
-public class CWCredentialsProvider implements com.amazonaws.auth.AWSCredentialsProvider {
+public class CWCredentials implements AWSCredentials {
 
     private final CWConfig config;
 
-    public CWCredentialsProvider(CWConfig config) {
+    public CWCredentials(CWConfig config) {
         this.config = config;
     }
 
     @Override
-    public AWSCredentials getCredentials() {
-        return new CWCredentials(config);
+    public String getAWSAccessKeyId() {
+        return config.accessKeyId;
     }
 
     @Override
-    public void refresh() {
-        // TODO: Customise this generated block
+    public String getAWSSecretKey() {
+        return config.accessKeySecret;
     }
 }

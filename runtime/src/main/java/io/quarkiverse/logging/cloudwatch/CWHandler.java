@@ -57,12 +57,10 @@ public class CWHandler extends Handler {
         Thread t = new Thread(publisher);
         t.setDaemon(true);
         t.start();
-
     }
 
     @Override
     public void publish(LogRecord record) {
-
         // Skip messages that are below the configured threshold
         if (record.getLevel().intValue() < getLevel().intValue()) {
             return;
