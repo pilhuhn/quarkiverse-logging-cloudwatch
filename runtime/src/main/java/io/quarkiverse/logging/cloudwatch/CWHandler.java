@@ -14,13 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.quarkus.logging.cloudwatch;
+package io.quarkiverse.logging.cloudwatch;
 
 import static java.util.stream.Collectors.joining;
 
-import com.amazonaws.services.logs.AWSLogs;
-import com.amazonaws.services.logs.model.InputLogEvent;
-import com.amazonaws.services.logs.model.PutLogEventsRequest;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +28,9 @@ import java.util.logging.LogRecord;
 
 import org.jboss.logmanager.ExtLogRecord;
 
+import com.amazonaws.services.logs.AWSLogs;
+import com.amazonaws.services.logs.model.InputLogEvent;
+import com.amazonaws.services.logs.model.PutLogEventsRequest;
 
 /**
  * @author hrupp
@@ -102,7 +102,7 @@ public class CWHandler extends Handler {
         if (record instanceof ExtLogRecord) {
 
             String tid = ((ExtLogRecord) record).getMdc("traceId");
-            if (tid!=null) {
+            if (tid != null) {
                 tags.put("traceId", tid);
             }
         }
@@ -110,8 +110,8 @@ public class CWHandler extends Handler {
         String body = assemblePayload(msg, tags, record.getThrown());
 
         InputLogEvent logEvent = new InputLogEvent()
-          .withMessage(body)
-          .withTimestamp(System.currentTimeMillis());
+                .withMessage(body)
+                .withTimestamp(System.currentTimeMillis());
         // Queue this up, so that it can be flushed later in batch
         // Asynchronously
         eventBuffer.add(logEvent);
@@ -131,29 +131,27 @@ public class CWHandler extends Handler {
 
         StringBuilder sb = new StringBuilder();
         sb.append("msg=[").append(message).append("]");
-        if (thrown!=null) {
+        if (thrown != null) {
             sb.append(", stacktrace=[");
-            fillStackTrace(sb,thrown);
+            fillStackTrace(sb, thrown);
             sb.append("]");
         }
         if (!tags.isEmpty()) {
             sb.append(", tags=[");
             String tagsAsString = tags.keySet().stream()
-                      .map(key -> key + "=" + tags.get(key))
-                      .collect(joining(", "));
+                    .map(key -> key + "=" + tags.get(key))
+                    .collect(joining(", "));
             sb.append(tagsAsString);
             sb.append("]");
         }
         return sb.toString();
     }
 
-
-
     private void fillStackTrace(StringBuilder sb, Throwable thrown) {
         for (StackTraceElement ste : thrown.getStackTrace()) {
             sb.append("  ").append(ste.toString()).append("\n");
         }
-        if (thrown.getCause()!= null) {
+        if (thrown.getCause() != null) {
             sb.append("Caused by:");
             fillStackTrace(sb, thrown.getCause());
         }
@@ -164,7 +162,6 @@ public class CWHandler extends Handler {
             this.appLabel = label;
         }
     }
-
 
     private class Publisher implements Runnable {
 
@@ -179,7 +176,7 @@ public class CWHandler extends Handler {
                     eventBuffer.clear();
                 }
 
-                if (events.size() > 0 ) {
+                if (events.size() > 0) {
 
                     PutLogEventsRequest request = new PutLogEventsRequest();
                     request.setLogEvents(events);
@@ -197,7 +194,7 @@ public class CWHandler extends Handler {
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();  // TODO: Customise this generated block
+                    e.printStackTrace(); // TODO: Customise this generated block
                 }
             }
         }

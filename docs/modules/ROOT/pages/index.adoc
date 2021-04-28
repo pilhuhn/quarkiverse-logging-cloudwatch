@@ -1,0 +1,19 @@
+= Quarkus logging cloudwatch
+
+== Introduction
+
+This https://quarkus.io[Quarkus extension] provides support for sending log records to Amazon CloudWatch.
+Just add it to your pom, enable it in `application.properties` and you are ready to go.
+
+== Installation
+
+If you want to use this extension, you need to add the `quarkus-logging-cloudwatch` extension first.
+In your `pom.xml` file, add:
+
+[source,xml]
+----
+<dependency>
+    <groupId>io.quarkiverse</groupId>
+    <artifactId>quarkus-logging-cloudwatch</artifactId>
+</dependency>
+----
