@@ -1,3 +1,6 @@
+NOTE: This project now https://github.com/quarkiverse/quarkus-logging-cloudwatch[lives in the Quarkiverse].
+
+
 = Quarkus Logging Cloudwatch
 
 .INFO
